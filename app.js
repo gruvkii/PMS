@@ -3,6 +3,7 @@ import {config} from "dotenv";
 import express from "express";
 import cors from "cors";
 import { connectDB } from "./database/db.js";
+import { errorMiddleware } from "./middlewares/errorMiddlewares.js"
 
 export const app = express();
 
@@ -18,3 +19,5 @@ app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 
 connectDB();
+
+app.use(errorMiddleware);
