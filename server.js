@@ -1,4 +1,9 @@
 import { app } from "./app.js";
-app.listen(443,() =>{
-    console.log(` Server running on port ${process.env.port}` );
-} )
+import { connectDB } from "./database/db.js";
+
+await connectDB();
+
+const port = Number(process.env.PORT || 5000);
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});

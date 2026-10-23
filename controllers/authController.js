@@ -1,8 +1,7 @@
-import { catchAsyncErrors } from "../middlewares/catchAsyncErrors.js"
+import catchAsyncErrors from "../middlewares/catchAsyncErrors.js";
 import ErrorHandler from "../middlewares/errorMiddlewares.js";
 import { User } from "../models/userModels.js";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
 import { sendVerificationCode } from "../utils/sendVerificationCode.js";
 
 export const register = catchAsyncErrors(async (req, res, next) => {
@@ -33,9 +32,13 @@ export const register = catchAsyncErrors(async (req, res, next) => {
             email,
             password: hashedPassword,
         })
-        const verificationCode = await user.generateVerificationCode();
+        const verificationCode = user.generateVerificationCode();
         await user.save();
-        sendVerificationCode(verificationCode, email, res);
+        await sendVerificationCode(verificationCode, email);
+        res.status(200).json({
+            success: true,
+            message: "Verification code sent successfully.",
+        });
     } catch (error) {
         next(error);
     }
